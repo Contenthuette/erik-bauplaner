@@ -6,9 +6,9 @@ import { useAuthActions } from "@convex-dev/auth/react";
 import { useQuery } from "convex/react";
 import { useRouter } from "expo-router";
 import { api } from "@/convex/_generated/api";
-import { Card } from "../../components/ui/Card";
-import { Button } from "../../components/ui/Button";
-import { colors, spacing, typography, fonts } from "../../lib/theme";
+import { Card } from "../../../components/ui/Card";
+import { Button } from "../../../components/ui/Button";
+import { colors, spacing, typography, fonts } from "../../../lib/theme";
 
 export default function Einstellungen() {
     const { signOut } = useAuthActions();

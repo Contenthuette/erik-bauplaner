@@ -61,6 +61,7 @@ export default defineSchema({
         companyId: v.optional(v.id("companies")),
         rolle: v.optional(rolleValidator),
         telefon: v.optional(v.string()),
+        adresse: v.optional(v.string()),
         pushToken: v.optional(v.string()),
         benachrichtigungsPrefs: v.optional(v.any()),
         letzterLogin: v.optional(v.number()),
@@ -91,6 +92,7 @@ export default defineSchema({
         endePlan: v.optional(v.number()),
         auftragswert: v.optional(v.number()),
         fortschrittProzent: v.number(),
+        aktuellerStageId: v.optional(v.id("stages")),
         erstelltAm: v.number(),
     })
         .index("by_company", ["companyId"])

@@ -1,5 +1,6 @@
 import { View, ActivityIndicator, StyleSheet } from "react-native";
 import { Redirect } from "expo-router";
+import type { Href } from "expo-router";
 import { Authenticated, Unauthenticated, AuthLoading, useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { colors } from "../lib/theme";
@@ -21,7 +22,7 @@ function RoleRouter() {
         return <Redirect href="/(customer)/bauvorhaben" />;
     }
     // owner / mitarbeiter -> Admin-Oberfläche
-    return <Redirect href="/(admin)/dashboard" />;
+    return <Redirect href={"/(admin)/dashboard" as Href} />;
 }
 
 export default function Index() {
