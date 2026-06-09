@@ -52,7 +52,8 @@
     "@react-native-community/datetimepicker": "8.6.0",
     "react-native-draggable-flatlist": "^4.0.3",
     "expo-clipboard": "~55.0.13",
-    "expo-image-picker": "~55.0.20"
+    "expo-image-picker": "~55.0.20",
+    "react-native-svg": "15.15.3"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",

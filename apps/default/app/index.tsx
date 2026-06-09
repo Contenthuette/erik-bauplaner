@@ -19,7 +19,7 @@ function RoleRouter() {
     if (me === null) return <Redirect href="/(auth)/login" />;
 
     if (me.rolle === "kunde") {
-        return <Redirect href="/(customer)/bauvorhaben" />;
+        return <Redirect href={"/(customer)/(tabs)/bauvorhaben" as Href} />;
     }
     // owner / mitarbeiter -> Admin-Oberfläche
     return <Redirect href={"/(admin)/dashboard" as Href} />;

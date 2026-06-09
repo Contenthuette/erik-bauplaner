@@ -82,3 +82,45 @@ export function formatEuro(value: number | undefined): string {
         maximumFractionDigits: 0,
     });
 }
+
+/**
+ * Kurzes Datum mit Wochentag (z.B. "Do 12.06.").
+ */
+export function formatDateWeekday(ms: number | undefined): string {
+    if (!ms) return "\u2014";
+    return new Date(ms).toLocaleDateString("de-DE", {
+        weekday: "short",
+        day: "2-digit",
+        month: "2-digit",
+    });
+}
+
+/**
+ * Zeitraum aus Start/Ende (z.B. "12.06. \u2013 18.06." oder "ab 12.06.").
+ */
+export function formatZeitraum(
+    start: number | undefined,
+    ende: number | undefined
+): string {
+    if (!start && !ende) return "Termin offen";
+    if (start && ende)
+        return `${formatDateWeekday(start)} \u2013 ${formatDateWeekday(ende)}`;
+    if (start) return `ab ${formatDateWeekday(start)}`;
+    return `bis ${formatDateWeekday(ende)}`;
+}
+
+/**
+ * Relative Zeitangabe (z.B. "vor 3 Std.", "Gestern", "vor 2 Tagen").
+ */
+export function formatRelative(ms: number, now: number): string {
+    const diff = now - ms;
+    const min = Math.floor(diff / 60000);
+    if (min < 1) return "gerade eben";
+    if (min < 60) return `vor ${min} Min.`;
+    const std = Math.floor(min / 60);
+    if (std < 24) return `vor ${std} Std.`;
+    const tage = Math.floor(std / 24);
+    if (tage === 1) return "Gestern";
+    if (tage < 7) return `vor ${tage} Tagen`;
+    return formatDateShort(ms);
+}

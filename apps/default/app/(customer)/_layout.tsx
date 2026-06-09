@@ -1,9 +1,8 @@
-import { Tabs } from "expo-router";
-import { Ionicons } from "@expo/vector-icons";
+import { Stack } from "expo-router";
 import { Authenticated, AuthLoading, Unauthenticated } from "convex/react";
 import { Redirect } from "expo-router";
 import { View, ActivityIndicator, StyleSheet } from "react-native";
-import { colors, fonts } from "../../lib/theme";
+import { colors } from "../../lib/theme";
 
 function Splash() {
     return (
@@ -13,6 +12,10 @@ function Splash() {
     );
 }
 
+/**
+ * Kunden-Bereich als Stack: Tab-Navigation in (tabs), Detail- und
+ * Feed-Screens (Projekt, Benachrichtigungen, Einstellungen) darüber.
+ */
 export default function CustomerLayout() {
     return (
         <>
@@ -23,58 +26,28 @@ export default function CustomerLayout() {
                 <Redirect href="/(auth)/login" />
             </Unauthenticated>
             <Authenticated>
-                <Tabs
+                <Stack
                     screenOptions={{
                         headerShown: false,
-                        tabBarActiveTintColor: colors.textPrimary,
-                        tabBarInactiveTintColor: colors.textSecondary,
-                        tabBarStyle: {
-                            backgroundColor: colors.background,
-                            borderTopColor: colors.border,
-                        },
-                        tabBarLabelStyle: {
-                            fontFamily: fonts.medium,
-                            fontSize: 11,
-                        },
+                        contentStyle: { backgroundColor: colors.background },
                     }}
                 >
-                    <Tabs.Screen
-                        name="bauvorhaben"
-                        options={{
-                            title: "Mein Bauvorhaben",
-                            tabBarIcon: ({ color, size }) => (
-                                <Ionicons name="home-outline" size={size} color={color} />
-                            ),
-                        }}
+                    <Stack.Screen name="(tabs)" />
+                    <Stack.Screen name="projekt" />
+                    <Stack.Screen name="benachrichtigungen" />
+                    <Stack.Screen
+                        name="passwort-aendern"
+                        options={{ presentation: "modal" }}
                     />
-                    <Tabs.Screen
-                        name="nachrichten"
-                        options={{
-                            title: "Nachrichten",
-                            tabBarIcon: ({ color, size }) => (
-                                <Ionicons name="chatbubbles-outline" size={size} color={color} />
-                            ),
-                        }}
+                    <Stack.Screen
+                        name="benachrichtigungs-einstellungen"
+                        options={{ presentation: "modal" }}
                     />
-                    <Tabs.Screen
-                        name="dokumente"
-                        options={{
-                            title: "Dokumente",
-                            tabBarIcon: ({ color, size }) => (
-                                <Ionicons name="document-text-outline" size={size} color={color} />
-                            ),
-                        }}
+                    <Stack.Screen
+                        name="profil-bearbeiten"
+                        options={{ presentation: "modal" }}
                     />
-                    <Tabs.Screen
-                        name="profil"
-                        options={{
-                            title: "Profil",
-                            tabBarIcon: ({ color, size }) => (
-                                <Ionicons name="person-outline" size={size} color={color} />
-                            ),
-                        }}
-                    />
-                </Tabs>
+                </Stack>
             </Authenticated>
         </>
     );
