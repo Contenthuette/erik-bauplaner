@@ -23,6 +23,7 @@ import { Badge } from "../../../components/ui/Badge";
 import { ProgressBar } from "../../../components/ui/ProgressBar";
 import { StageEditor } from "../../../components/admin/StageEditor";
 import { UpdateComposer } from "../../../components/admin/UpdateComposer";
+import { InvoiceSection } from "../../../components/admin/InvoiceSection";
 import {
     colors,
     spacing,
@@ -367,6 +368,11 @@ export default function ProjektDetail() {
                             })}
                         </View>
                     )}
+                </View>
+
+                {/* Rechnungen */}
+                <View style={styles.section}>
+                    <InvoiceSection projectId={projectId} />
                 </View>
             </ScrollView>
 

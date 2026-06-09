@@ -14,6 +14,7 @@ import {
     Inter_700Bold,
 } from "@expo-google-fonts/inter";
 import { colors } from "../lib/theme";
+import { usePushRegistration } from "../hooks/use-push-registration";
 
 const convex = new ConvexReactClient(process.env.EXPO_PUBLIC_CONVEX_URL!, {
     unsavedChangesWarning: false,
@@ -26,6 +27,12 @@ const secureStorage = {
 };
 
 const isNative = Platform.OS === "ios" || Platform.OS === "android";
+
+// Registriert den Push-Token, sobald der User eingeloggt ist (innerhalb Provider).
+function PushRegistrar() {
+    usePushRegistration();
+    return null;
+}
 
 export default function RootLayout() {
     const [fontsLoaded] = useFonts({
@@ -47,6 +54,7 @@ export default function RootLayout() {
                     storage={isNative ? secureStorage : undefined}
                 >
                     <StatusBar style="dark" />
+                    <PushRegistrar />
                     <Stack
                         screenOptions={{
                             headerShown: false,

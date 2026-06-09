@@ -53,7 +53,10 @@
     "react-native-draggable-flatlist": "^4.0.3",
     "expo-clipboard": "~55.0.13",
     "expo-image-picker": "~55.0.20",
-    "react-native-svg": "15.15.3"
+    "react-native-svg": "15.15.3",
+    "expo-document-picker": "~55.0.13",
+    "expo-device": "~55.0.17",
+    "expo-notifications": "~55.0.23"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",

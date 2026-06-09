@@ -3,6 +3,7 @@ import { authQuery, authMutation } from "./functions";
 import { mutation } from "./_generated/server";
 import { getAuthUserId } from "@convex-dev/auth/server";
 import { rolleValidator } from "./schema";
+import { pushNotifications } from "./push";
 
 /**
  * Liefert das Profil des aktuell eingeloggten Users inkl. Rolle und Company.
@@ -126,6 +127,35 @@ export const updateMyProfile = authMutation({
         if (args.adresse !== undefined)
             patch.adresse = args.adresse.trim() || undefined;
         await ctx.db.patch(ctx.user._id, patch);
+        return null;
+    },
+});
+
+/**
+ * Registriert den Expo-Push-Token des Geräts für den aktuellen User.
+ */
+export const recordPushToken = authMutation({
+    args: { pushToken: v.string() },
+    returns: v.null(),
+    handler: async (ctx, args) => {
+        await ctx.db.patch(ctx.user._id, { pushToken: args.pushToken });
+        await pushNotifications.recordToken(ctx, {
+            userId: ctx.user._id,
+            pushToken: args.pushToken,
+        });
+        return null;
+    },
+});
+
+/**
+ * Entfernt den Push-Token (z.B. beim Abmelden).
+ */
+export const removePushToken = authMutation({
+    args: {},
+    returns: v.null(),
+    handler: async (ctx) => {
+        await ctx.db.patch(ctx.user._id, { pushToken: undefined });
+        await pushNotifications.removeToken(ctx, { userId: ctx.user._id });
         return null;
     },
 });

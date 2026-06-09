@@ -4,6 +4,7 @@ import { loadProjectForUser, istBetrieb, requireCompanyId } from "./access";
 import { stageStatusValidator } from "./schema";
 import { recomputeProjectProgress } from "./projects";
 import { Doc } from "./_generated/dataModel";
+import { notifyUser } from "./notify";
 
 // =============================================================================
 // Ablaufplan-Schritte (Stages) — Herzstück der Admin-Seite
@@ -174,7 +175,16 @@ export const setStageStatus = authMutation({
                 erstelltVon: user._id,
                 erstelltAm: now,
             });
-            // Hinweis: Kundenbenachrichtigung folgt in einem späteren Schritt.
+            // Kunde benachrichtigen.
+            if (project.customerId) {
+                await notifyUser(ctx, {
+                    userId: project.customerId,
+                    typ: "schritt_erledigt",
+                    titel: "Schritt abgeschlossen",
+                    text: stage.titel,
+                    bezugId: project._id,
+                });
+            }
         }
 
         await recomputeProjectProgress(ctx, project._id);

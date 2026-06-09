@@ -35,6 +35,7 @@ export default function AdminLayout() {
                 >
                     <Stack.Screen name="(tabs)" />
                     <Stack.Screen name="projekt" />
+                    <Stack.Screen name="chat" />
                     <Stack.Screen
                         name="kunde-anlegen"
                         options={{ presentation: "modal" }}

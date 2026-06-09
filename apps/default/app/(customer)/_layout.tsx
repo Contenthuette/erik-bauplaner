@@ -34,6 +34,7 @@ export default function CustomerLayout() {
                 >
                     <Stack.Screen name="(tabs)" />
                     <Stack.Screen name="projekt" />
+                    <Stack.Screen name="chat" />
                     <Stack.Screen name="benachrichtigungen" />
                     <Stack.Screen
                         name="passwort-aendern"

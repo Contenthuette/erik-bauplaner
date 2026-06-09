@@ -2,6 +2,7 @@ import { v } from "convex/values";
 import { authQuery, authMutation } from "./functions";
 import { loadProjectForUser, istBetrieb } from "./access";
 import { updateTypValidator } from "./schema";
+import { notifyUser } from "./notify";
 
 // =============================================================================
 // Status-Updates am Projekt (Fortschritt / Verzögerung / Wetter / Info)
@@ -53,7 +54,17 @@ export const postUpdate = authMutation({
             await ctx.db.patch(project._id, { status: "verzoegert" });
         }
 
-        // Hinweis: Kundenbenachrichtigung folgt in einem späteren Schritt.
+        // Kunde benachrichtigen.
+        if (project.customerId) {
+            await notifyUser(ctx, {
+                userId: project.customerId,
+                typ: "status_update",
+                titel: "Neues Update",
+                text:
+                    text.length > 120 ? `${text.slice(0, 117)}\u2026` : text,
+                bezugId: project._id,
+            });
+        }
         return updateId;
     },
 });

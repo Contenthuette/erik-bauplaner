@@ -1,8 +1,11 @@
 import { Tabs } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
+import { useQuery } from "convex/react";
+import { api } from "@/convex/_generated/api";
 import { colors, fonts } from "../../../lib/theme";
 
 export default function AdminTabsLayout() {
+    const unread = useQuery(api.messages.inboxUnreadCount);
     return (
         <Tabs
             screenOptions={{
@@ -41,6 +44,18 @@ export default function AdminTabsLayout() {
                 name="nachrichten"
                 options={{
                     title: "Nachrichten",
+                    tabBarBadge:
+                        unread && unread > 0
+                            ? unread > 9
+                                ? "9+"
+                                : unread
+                            : undefined,
+                    tabBarBadgeStyle: {
+                        backgroundColor: colors.statusRed,
+                        color: colors.textOnDark,
+                        fontFamily: fonts.bold,
+                        fontSize: 10,
+                    },
                     tabBarIcon: ({ color, size }) => (
                         <Ionicons name="chatbubbles-outline" size={size} color={color} />
                     ),
