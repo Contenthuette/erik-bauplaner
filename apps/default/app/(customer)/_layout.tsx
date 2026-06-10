@@ -3,6 +3,7 @@ import { Authenticated, AuthLoading, Unauthenticated } from "convex/react";
 import { Redirect } from "expo-router";
 import { View, ActivityIndicator, StyleSheet } from "react-native";
 import { colors } from "../../lib/theme";
+import { ConsentGate } from "../../components/ConsentGate";
 
 function Splash() {
     return (
@@ -26,29 +27,31 @@ export default function CustomerLayout() {
                 <Redirect href="/(auth)/login" />
             </Unauthenticated>
             <Authenticated>
-                <Stack
-                    screenOptions={{
-                        headerShown: false,
-                        contentStyle: { backgroundColor: colors.background },
-                    }}
-                >
-                    <Stack.Screen name="(tabs)" />
-                    <Stack.Screen name="projekt" />
-                    <Stack.Screen name="chat" />
-                    <Stack.Screen name="benachrichtigungen" />
-                    <Stack.Screen
-                        name="passwort-aendern"
-                        options={{ presentation: "modal" }}
-                    />
-                    <Stack.Screen
-                        name="benachrichtigungs-einstellungen"
-                        options={{ presentation: "modal" }}
-                    />
-                    <Stack.Screen
-                        name="profil-bearbeiten"
-                        options={{ presentation: "modal" }}
-                    />
-                </Stack>
+                <ConsentGate>
+                    <Stack
+                        screenOptions={{
+                            headerShown: false,
+                            contentStyle: { backgroundColor: colors.background },
+                        }}
+                    >
+                        <Stack.Screen name="(tabs)" />
+                        <Stack.Screen name="projekt" />
+                        <Stack.Screen name="chat" />
+                        <Stack.Screen name="benachrichtigungen" />
+                        <Stack.Screen
+                            name="passwort-aendern"
+                            options={{ presentation: "modal" }}
+                        />
+                        <Stack.Screen
+                            name="benachrichtigungs-einstellungen"
+                            options={{ presentation: "modal" }}
+                        />
+                        <Stack.Screen
+                            name="profil-bearbeiten"
+                            options={{ presentation: "modal" }}
+                        />
+                    </Stack>
+                </ConsentGate>
             </Authenticated>
         </>
     );

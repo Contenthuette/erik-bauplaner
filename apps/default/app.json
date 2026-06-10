@@ -1,23 +1,26 @@
 {
     "expo": {
-        "name": "Bloom app (rename me)",
-        "slug": "bloom-app-rename-me",
+        "name": "Polier",
+        "slug": "polier",
         "version": "1.0.0",
         "runtimeVersion": {
             "policy": "sdkVersion"
         },
         "orientation": "portrait",
         "icon": "../../assets/images/icon.png",
-        "scheme": "myapp",
-        "userInterfaceStyle": "automatic",
+        "scheme": "polier",
+        "userInterfaceStyle": "light",
         "newArchEnabled": true,
         "ios": {
-            "supportsTablet": true
+            "supportsTablet": true,
+            "infoPlist": {
+                "ITSAppUsesNonExemptEncryption": false
+            }
         },
         "android": {
             "adaptiveIcon": {
                 "foregroundImage": "../../assets/images/adaptive-icon.png",
-                "backgroundColor": "#ffffff"
+                "backgroundColor": "#FFFFFF"
             }
         },
         "web": {
@@ -31,9 +34,16 @@
                 "expo-splash-screen",
                 {
                     "image": "../../assets/images/splash-icon.png",
-                    "imageWidth": 200,
+                    "imageWidth": 180,
                     "resizeMode": "contain",
-                    "backgroundColor": "#FAFAFA"
+                    "backgroundColor": "#FFFFFF"
+                }
+            ],
+            [
+                "expo-notifications",
+                {
+                    "icon": "../../assets/images/icon.png",
+                    "color": "#0A0A0A"
                 }
             ],
             "expo-secure-store",

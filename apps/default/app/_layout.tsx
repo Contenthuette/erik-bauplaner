@@ -15,6 +15,7 @@ import {
 } from "@expo-google-fonts/inter";
 import { colors } from "../lib/theme";
 import { usePushRegistration } from "../hooks/use-push-registration";
+import { OfflineBanner } from "../components/OfflineBanner";
 
 const convex = new ConvexReactClient(process.env.EXPO_PUBLIC_CONVEX_URL!, {
     unsavedChangesWarning: false,
@@ -61,6 +62,7 @@ export default function RootLayout() {
                             contentStyle: { backgroundColor: colors.background },
                         }}
                     />
+                    <OfflineBanner />
                 </ConvexAuthProvider>
             </SafeAreaProvider>
         </GestureHandlerRootView>

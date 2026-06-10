@@ -10,6 +10,7 @@ import { Linking } from "react-native";
 import { api } from "@/convex/_generated/api";
 import { Card } from "../../../components/ui/Card";
 import { Button } from "../../../components/ui/Button";
+import { DatenschutzActions } from "../../../components/DatenschutzActions";
 import { colors, spacing, typography, fonts } from "../../../lib/theme";
 
 export default function Profil() {
@@ -141,6 +142,9 @@ export default function Profil() {
                         </Card>
                     </>
                 ) : null}
+
+                {/* DSGVO */}
+                <DatenschutzActions />
 
                 <View style={styles.logoutWrap}>
                     <Button

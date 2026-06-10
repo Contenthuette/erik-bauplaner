@@ -15,6 +15,7 @@ import * as Haptics from "expo-haptics";
 import { useQuery } from "convex/react";
 import { useRouter } from "expo-router";
 import type { Href } from "expo-router";
+import { useLocalSearchParams } from "expo-router";
 import Animated, { FadeInUp, FadeIn } from "react-native-reanimated";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
@@ -143,10 +144,17 @@ function ProjectCard({
 
 export default function ProjekteScreen() {
     const router = useRouter();
+    const params = useLocalSearchParams<{ filter?: string }>();
     const projects = useQuery(api.projects.listProjects);
     const [search, setSearch] = useState("");
     const [filter, setFilter] = useState<FilterKey>("alle");
     const [fabOpen, setFabOpen] = useState(false);
+
+    React.useEffect(() => {
+        if (params.filter === "verzoegert") setFilter("verzug");
+        else if (params.filter === "laeuft") setFilter("laeuft");
+        else if (params.filter === "abgeschlossen") setFilter("abgeschlossen");
+    }, [params.filter]);
 
     const filtered = useMemo(() => {
         if (!projects) return [];

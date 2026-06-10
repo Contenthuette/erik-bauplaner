@@ -65,6 +65,8 @@ export default defineSchema({
         pushToken: v.optional(v.string()),
         benachrichtigungsPrefs: v.optional(v.any()),
         letzterLogin: v.optional(v.number()),
+        // DSGVO: Zeitpunkt der Zustimmung zur Datenschutzerklärung.
+        datenschutzAkzeptiertAm: v.optional(v.number()),
         // Temporär beim Owner-Signup: Firmenname, bis die Company erzeugt wurde.
         pendingCompanyName: v.optional(v.string()),
     })
