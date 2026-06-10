@@ -1,7 +1,8 @@
 // =============================================================================
 // Polier — Zentrale Design-Tokens
 // =============================================================================
-// Apple/iOS-clean, minimalistisch, viel Weißraum.
+// Apple/iOS-clean, minimalistisch, premium. Referenz-Stil: reinweiß, fast-
+// schwarze Schrift, Inter, sehr viel Weiÿraum.
 // Alle Screens nutzen diese Werte — niemals Farben/Spacing hart kodieren.
 
 export const colors = {
@@ -13,6 +14,7 @@ export const colors = {
     // Text
     textPrimary: "#0A0A0A",
     textSecondary: "#6B6B6B",
+    textTertiary: "#9B9B9B",
     textOnDark: "#FFFFFF",
 
     // Linien / Ränder
@@ -31,9 +33,9 @@ export const colors = {
     statusRed: "#E5484D",
 
     // dezente getönte Hintergründe für Status-Badges
-    statusGreenBg: "#E7F6EE",
-    statusAmberBg: "#FBF3DF",
-    statusRedBg: "#FCE9EA",
+    statusGreenBg: "#ECF8F1",
+    statusAmberBg: "#FBF4E2",
+    statusRedBg: "#FCEDEE",
 } as const;
 
 export const spacing = {
@@ -47,7 +49,7 @@ export const spacing = {
 
 export const radius = {
     button: 12,
-    card: 16,
+    card: 18,
     pill: 999,
     input: 12,
 } as const;
@@ -60,42 +62,46 @@ export const fonts = {
     bold: "Inter_700Bold",
 } as const;
 
+// Klare Typo-Skala. Große Überschriften eng (letter-spacing ≈ -0.02em),
+// Body luftig (line-height ≈ 1.5).
 export const typography = {
     largeTitle: {
         fontFamily: fonts.bold,
         fontSize: 34,
-        lineHeight: 41,
+        lineHeight: 40,
         color: colors.textPrimary,
-        letterSpacing: 0.37,
+        letterSpacing: -0.68,
     },
     title: {
         fontFamily: fonts.bold,
-        fontSize: 22,
-        lineHeight: 28,
+        fontSize: 28,
+        lineHeight: 34,
         color: colors.textPrimary,
+        letterSpacing: -0.56,
     },
     headline: {
         fontFamily: fonts.semibold,
-        fontSize: 17,
-        lineHeight: 22,
+        fontSize: 20,
+        lineHeight: 26,
         color: colors.textPrimary,
+        letterSpacing: -0.2,
     },
     body: {
         fontFamily: fonts.regular,
         fontSize: 17,
-        lineHeight: 22,
+        lineHeight: 25,
         color: colors.textPrimary,
     },
     callout: {
         fontFamily: fonts.regular,
         fontSize: 16,
-        lineHeight: 21,
+        lineHeight: 24,
         color: colors.textPrimary,
     },
     subhead: {
         fontFamily: fonts.regular,
         fontSize: 15,
-        lineHeight: 20,
+        lineHeight: 22,
         color: colors.textSecondary,
     },
     footnote: {
@@ -104,16 +110,34 @@ export const typography = {
         lineHeight: 18,
         color: colors.textSecondary,
     },
+    // Caption (Apple-Skala): 13px.
+    caption: {
+        fontFamily: fonts.regular,
+        fontSize: 13,
+        lineHeight: 18,
+        color: colors.textSecondary,
+    },
+    // Eyebrow-Label über Sektions-Headlines (contenthütte-Signatur):
+    // klein, medium, gedämpftes Grau, leichter letter-spacing.
+    eyebrow: {
+        fontFamily: fonts.medium,
+        fontSize: 13,
+        lineHeight: 16,
+        color: colors.textTertiary,
+        letterSpacing: 0.6,
+    },
 } as const;
 
-// Sehr dezenter iOS-Schatten für Cards.
+// Ultraweiche, geschichtete iOS-Schatten für Cards. Keine harten/dunklen Schatten.
 export const shadows = {
     card: {
-        boxShadow: "0px 1px 3px rgba(10, 10, 10, 0.06)",
+        boxShadow:
+            "0px 1px 3px rgba(10, 10, 10, 0.04), 0px 8px 24px rgba(10, 10, 10, 0.05)",
     },
 } as const;
 
 export const layout = {
     minTouchTarget: 44,
-    screenPadding: spacing.lg,
+    buttonHeight: 52,
+    screenPadding: spacing.xl,
 } as const;

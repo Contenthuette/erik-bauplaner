@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
     View,
     Text,
@@ -12,13 +12,22 @@ interface InputProps extends TextInputProps {
     label?: string;
 }
 
-export function Input({ label, style, ...rest }: InputProps) {
+export function Input({ label, style, onFocus, onBlur, ...rest }: InputProps) {
+    const [focused, setFocused] = useState(false);
     return (
         <View style={styles.wrapper}>
             {label ? <Text style={styles.label}>{label}</Text> : null}
             <TextInput
-                placeholderTextColor={colors.textSecondary}
-                style={[styles.input, style]}
+                placeholderTextColor={colors.textTertiary}
+                style={[styles.input, focused && styles.inputFocused, style]}
+                onFocus={(e) => {
+                    setFocused(true);
+                    onFocus?.(e);
+                }}
+                onBlur={(e) => {
+                    setFocused(false);
+                    onBlur?.(e);
+                }}
                 {...rest}
             />
         </View>
@@ -27,25 +36,29 @@ export function Input({ label, style, ...rest }: InputProps) {
 
 const styles = StyleSheet.create({
     wrapper: {
-        gap: spacing.xs,
+        gap: spacing.sm,
     },
     label: {
         fontFamily: fonts.medium,
-        fontSize: 14,
+        fontSize: 15,
         color: colors.textSecondary,
         marginLeft: 2,
     },
     input: {
-        minHeight: layout.minTouchTarget,
+        minHeight: layout.minTouchTarget + 8,
         borderWidth: 1,
         borderColor: colors.border,
         borderRadius: radius.input,
         borderCurve: "continuous",
         paddingHorizontal: spacing.lg,
-        paddingVertical: 12,
+        paddingVertical: 14,
         fontFamily: fonts.regular,
         fontSize: 17,
         color: colors.textPrimary,
+        backgroundColor: colors.surfaceMuted,
+    },
+    inputFocused: {
+        borderColor: colors.textPrimary,
         backgroundColor: colors.surface,
     },
 });

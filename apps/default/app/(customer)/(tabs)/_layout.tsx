@@ -1,8 +1,10 @@
 import { Tabs } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
+import { Platform } from "react-native";
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { colors, fonts } from "../../../lib/theme";
+import { TabBarBackground } from "../../../components/ui/TabBarBackground";
 
 export default function CustomerTabsLayout() {
     const unread = useQuery(api.messages.myUnreadMessageCount);
@@ -12,9 +14,12 @@ export default function CustomerTabsLayout() {
                 headerShown: false,
                 tabBarActiveTintColor: colors.textPrimary,
                 tabBarInactiveTintColor: colors.textSecondary,
+                tabBarBackground: () => <TabBarBackground />,
                 tabBarStyle: {
-                    backgroundColor: colors.background,
+                    backgroundColor:
+                        Platform.OS === "ios" ? "transparent" : colors.background,
                     borderTopColor: colors.border,
+                    borderTopWidth: 0,
                 },
                 tabBarLabelStyle: {
                     fontFamily: fonts.medium,
