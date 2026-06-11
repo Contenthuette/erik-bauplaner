@@ -15,6 +15,7 @@ import type { Href } from "expo-router";
 import { api } from "@/convex/_generated/api";
 import { colors, spacing, typography, fonts, radius } from "../../../lib/theme";
 import { formatRelative } from "../../../lib/format";
+import { HeaderTitle } from "../../../components/HeaderTitle";
 
 export default function AdminNachrichten() {
     const router = useRouter();
@@ -27,7 +28,7 @@ export default function AdminNachrichten() {
                 contentContainerStyle={styles.scroll}
                 showsVerticalScrollIndicator={false}
             >
-                <Text style={styles.largeTitle}>Nachrichten</Text>
+                <HeaderTitle title="Nachrichten" style={styles.largeTitle} />
 
                 {inbox === undefined ? (
                     <View style={styles.center}>

@@ -20,6 +20,7 @@ import { ColumnChart } from "../../../components/charts/ColumnChart";
 import { ProgressBar } from "../../../components/ui/ProgressBar";
 import { colors, spacing, typography, fonts, radius } from "../../../lib/theme";
 import { formatEuro } from "../../../lib/format";
+import { HeaderTitle } from "../../../components/HeaderTitle";
 
 const statusFarbe: Record<string, string> = {
     geplant: "#9AA0A6",
@@ -75,7 +76,7 @@ export default function Dashboard() {
                     />
                 }
             >
-                <Text style={styles.largeTitle}>Dashboard</Text>
+                <HeaderTitle title="Dashboard" style={styles.largeTitle} />
 
                 {/* KPI-Cards */}
                 <View style={styles.kpiGrid}>

@@ -11,6 +11,7 @@ import { api } from "@/convex/_generated/api";
 import { Card } from "../../../components/ui/Card";
 import { Button } from "../../../components/ui/Button";
 import { DatenschutzActions } from "../../../components/DatenschutzActions";
+import { HeaderTitle } from "../../../components/HeaderTitle";
 import { colors, spacing, typography, fonts } from "../../../lib/theme";
 
 export default function Einstellungen() {
@@ -32,7 +33,7 @@ export default function Einstellungen() {
                 contentContainerStyle={styles.scroll}
                 showsVerticalScrollIndicator={false}
             >
-                <Text style={styles.largeTitle}>Einstellungen</Text>
+                <HeaderTitle title="Einstellungen" style={styles.largeTitle} />
 
                 {/* Firmenprofil-Karte */}
                 <Card style={styles.profileCard}>

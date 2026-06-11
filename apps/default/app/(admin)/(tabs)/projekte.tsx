@@ -21,6 +21,7 @@ import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import { Badge } from "../../../components/ui/Badge";
 import { ProgressBar } from "../../../components/ui/ProgressBar";
+import { HeaderTitle } from "../../../components/HeaderTitle";
 import { colors, spacing, typography, fonts, radius, shadows } from "../../../lib/theme";
 import {
     projectStatusMeta,
@@ -200,7 +201,7 @@ export default function ProjekteScreen() {
                 showsVerticalScrollIndicator={false}
                 ListHeaderComponent={
                     <View>
-                        <Text style={styles.largeTitle}>Projekte</Text>
+                        <HeaderTitle title="Projekte" style={styles.largeTitle} />
 
                         <View style={styles.searchBox}>
                             <Ionicons
