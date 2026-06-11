@@ -50,6 +50,12 @@ const fullSchema = {
     // Public-facing site URL used by Convex Auth for OAuth redirect callbacks.
     SITE_URL: v.string(),
 
+    // ---- Stripe (Abo-Zahlungen) ----
+    // Optional, damit das Backend vor dem Eintragen der Keys bootet.
+    STRIPE_SECRET_KEY: v.optional(v.string()),
+    STRIPE_WEBHOOK_SECRET: v.optional(v.string()),
+    // Stripe-Price-ID des Abo-Plans (price_...). Optional bis angelegt.
+    STRIPE_PRICE_ID: v.optional(v.string()),
     // ---- User-managed examples (uncomment + adapt as you add features) -----
     // Required string -- backend won't boot without it once provisioning is
     // complete and you've set it via `bunx convex env set OPENAI_API_KEY ...`.

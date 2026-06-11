@@ -86,6 +86,13 @@ export default function Einstellungen() {
                     />
                     <Divider />
                     <Row
+                        icon="card-outline"
+                        label="Abo"
+                        sub={istOwner ? undefined : "Nur Inhaber"}
+                        onPress={() => router.push("/(admin)/abo" as Href)}
+                    />
+                    <Divider />
+                    <Row
                         icon="notifications-outline"
                         label="Benachrichtigungen"
                         onPress={() =>

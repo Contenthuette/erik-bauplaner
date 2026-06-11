@@ -42,6 +42,16 @@ export const invoiceStatusValidator = v.union(
     v.literal("ueberfaellig")
 );
 
+// Stripe-Abo-Status, synchronisiert über Webhooks.
+export const subscriptionStatusValidator = v.union(
+    v.literal("none"),
+    v.literal("trialing"),
+    v.literal("active"),
+    v.literal("past_due"),
+    v.literal("canceled"),
+    v.literal("incomplete")
+);
+
 export default defineSchema({
     ...authTables,
 
@@ -81,7 +91,17 @@ export default defineSchema({
         kontaktTelefon: v.optional(v.string()),
         adresse: v.optional(v.string()),
         erstelltAm: v.number(),
-    }),
+        // --- Stripe-Abo ---
+        stripeCustomerId: v.optional(v.string()),
+        stripeSubscriptionId: v.optional(v.string()),
+        subscriptionStatus: v.optional(subscriptionStatusValidator),
+        // Ende der laufenden Abrechnungsperiode bzw. Trial (ms).
+        currentPeriodEnd: v.optional(v.number()),
+        // Ob die Kündigung zum Periodenende vorgemerkt ist.
+        cancelAtPeriodEnd: v.optional(v.boolean()),
+    })
+        .index("by_stripe_customer", ["stripeCustomerId"])
+        .index("by_stripe_subscription", ["stripeSubscriptionId"]),
 
     projects: defineTable({
         companyId: v.id("companies"),

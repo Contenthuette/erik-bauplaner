@@ -4,6 +4,7 @@ import { Redirect } from "expo-router";
 import { View, ActivityIndicator, StyleSheet } from "react-native";
 import { colors } from "../../lib/theme";
 import { ConsentGate } from "../../components/ConsentGate";
+import { AboGate } from "../../components/AboGate";
 
 function Splash() {
     return (
@@ -29,6 +30,7 @@ export default function AdminLayout() {
             </Unauthenticated>
             <Authenticated>
                 <ConsentGate>
+                    <AboGate>
                     <Stack
                         screenOptions={{
                             headerShown: false,
@@ -38,6 +40,7 @@ export default function AdminLayout() {
                         <Stack.Screen name="(tabs)" />
                         <Stack.Screen name="projekt" />
                         <Stack.Screen name="chat" />
+                        <Stack.Screen name="abo" />
                         <Stack.Screen name="firmenprofil" />
                         <Stack.Screen name="team" />
                         <Stack.Screen name="vorlagen" />
@@ -51,6 +54,7 @@ export default function AdminLayout() {
                             options={{ presentation: "modal" }}
                         />
                     </Stack>
+                    </AboGate>
                 </ConsentGate>
             </Authenticated>
         </>
