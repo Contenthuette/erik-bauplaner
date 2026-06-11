@@ -127,6 +127,7 @@ const styles = StyleSheet.create({
     label: {
         fontFamily: fonts.semibold,
         fontSize: 17,
+        textAlign: "center",
     },
     labelPrimary: {
         color: colors.buttonPrimaryText,

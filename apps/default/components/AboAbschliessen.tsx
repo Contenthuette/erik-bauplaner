@@ -111,17 +111,13 @@ export function AboAbschliessen({
                         </Text>
                         <Text style={styles.priceUnit}>netto / Monat</Text>
                     </View>
-                    <Text style={styles.priceSub}>
-                        zzgl. {plan.mwstProzent}% MwSt. — brutto{" "}
-                        {euro(plan.bruttoCent)} € / Monat
-                    </Text>
 
                     <View style={styles.divider} />
 
-                    <Feature text={`${plan.trialTage} Tage kostenlos testen`} />
-                    <Feature text="Karte wird zu Beginn hinterlegt" />
-                    <Feature text="Erste Abbuchung erst nach der Testphase" />
-                    <Feature text="Monatlich kündbar" />
+                    <Feature text="Kundenkommunikation leicht gemacht" />
+                    <Feature text="Optimiere deine Kundenkommunikation" />
+                    <Feature text="Polier spart Zeit und Nerven" />
+                    <Feature text="Keine Missverständnisse mehr, Bauabläufe übersichtlich dargestellt" />
                 </View>
 
                 {kannVerwalten ? (
@@ -245,10 +241,6 @@ const styles = StyleSheet.create({
     priceUnit: {
         ...typography.subhead,
         marginBottom: 8,
-    },
-    priceSub: {
-        ...typography.footnote,
-        marginTop: 2,
     },
     divider: {
         height: 1,
