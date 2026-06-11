@@ -6,15 +6,19 @@ import {
     ScrollView,
     Pressable,
     ActivityIndicator,
-    Linking,
+    Platform,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
+import * as FileSystem from "expo-file-system";
+import * as Sharing from "expo-sharing";
+import * as Haptics from "expo-haptics";
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { Badge } from "../../../components/ui/Badge";
 import { colors, spacing, typography, fonts, radius } from "../../../lib/theme";
 import { formatEuro, formatDate } from "../../../lib/format";
+import { useAttachmentViewer } from "../../../components/AttachmentViewer";
 
 const statusMeta: Record<
     string,
@@ -26,6 +30,7 @@ const statusMeta: Record<
 };
 
 export default function Dokumente() {
+    const { openAttachment } = useAttachmentViewer();
     const offene = useQuery(api.invoices.myOpenInvoices);
     const liste = useQuery(api.invoices.myAllInvoices);
 
@@ -38,6 +43,17 @@ export default function Dokumente() {
     const hatUeberfaellig = (offene ?? []).some(
         (inv) => inv.status === "ueberfaellig"
     );
+
+    async function handleDownload(url: string) {
+        if (Platform.OS !== "web") Haptics.selectionAsync();
+        try {
+            const ziel = FileSystem.cacheDirectory + "rechnung.pdf";
+            const { uri } = await FileSystem.downloadAsync(url, ziel);
+            if (await Sharing.isAvailableAsync()) await Sharing.shareAsync(uri);
+        } catch {
+            // still bleiben
+        }
+    }
 
     return (
         <SafeAreaView style={styles.safe} edges={["top"]}>
@@ -140,9 +156,11 @@ export default function Dokumente() {
                                                     <Pressable
                                                         style={styles.aktBtn}
                                                         onPress={() =>
-                                                            Linking.openURL(
-                                                                inv.pdfUrl!
-                                                            )
+                                                            openAttachment({
+                                                                url: inv.pdfUrl!,
+                                                                istPdf: true,
+                                                                name: "rechnung.pdf",
+                                                            })
                                                         }
                                                     >
                                                         <Ionicons
@@ -163,7 +181,7 @@ export default function Dokumente() {
                                                     <Pressable
                                                         style={styles.aktBtn}
                                                         onPress={() =>
-                                                            Linking.openURL(
+                                                            handleDownload(
                                                                 inv.pdfUrl!
                                                             )
                                                         }

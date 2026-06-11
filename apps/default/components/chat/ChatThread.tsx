@@ -10,7 +10,6 @@ import {
     KeyboardAvoidingView,
     Platform,
     Alert,
-    Linking,
 } from "react-native";
 import { Image } from "expo-image";
 import { Ionicons } from "@expo/vector-icons";
@@ -22,6 +21,7 @@ import { useQuery, useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import { colors, spacing, fonts } from "../../lib/theme";
+import { useAttachmentViewer } from "../AttachmentViewer";
 
 interface ChatThreadProps {
     projectId: Id<"projects">;
@@ -49,6 +49,7 @@ function formatTag(ms: number): string {
 
 export function ChatThread({ projectId }: ChatThreadProps) {
     const insets = useSafeAreaInsets();
+    const { openAttachment } = useAttachmentViewer();
     const messages = useQuery(api.messages.listMessages, { projectId });
     const sendMessage = useMutation(api.messages.sendMessage);
     const markRead = useMutation(api.messages.markThreadRead);
@@ -216,7 +217,12 @@ export function ChatThread({ projectId }: ChatThreadProps) {
                                     <Pressable
                                         key={idx}
                                         style={styles.pdfChip}
-                                        onPress={() => Linking.openURL(an.url)}
+                                        onPress={() =>
+                                            openAttachment({
+                                                url: an.url,
+                                                istPdf: true,
+                                            })
+                                        }
                                     >
                                         <Ionicons
                                             name="document-text"
@@ -241,7 +247,12 @@ export function ChatThread({ projectId }: ChatThreadProps) {
                                 ) : (
                                     <Pressable
                                         key={idx}
-                                        onPress={() => Linking.openURL(an.url)}
+                                        onPress={() =>
+                                            openAttachment({
+                                                url: an.url,
+                                                istPdf: false,
+                                            })
+                                        }
                                     >
                                         <Image
                                             source={{ uri: an.url }}

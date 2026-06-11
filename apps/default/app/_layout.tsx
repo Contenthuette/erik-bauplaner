@@ -18,6 +18,7 @@ import { convexUrl } from "../lib/config";
 import { usePushRegistration } from "../hooks/use-push-registration";
 import { OfflineBanner } from "../components/OfflineBanner";
 import { RootErrorBoundary } from "../components/RootErrorBoundary";
+import { AttachmentViewerProvider } from "../components/AttachmentViewer";
 
 const convex = new ConvexReactClient(convexUrl, {
     unsavedChangesWarning: false,
@@ -59,12 +60,14 @@ export default function RootLayout() {
                     >
                         <StatusBar style="dark" />
                         <PushRegistrar />
-                        <Stack
-                            screenOptions={{
-                                headerShown: false,
-                                contentStyle: { backgroundColor: colors.background },
-                            }}
-                        />
+                        <AttachmentViewerProvider>
+                            <Stack
+                                screenOptions={{
+                                    headerShown: false,
+                                    contentStyle: { backgroundColor: colors.background },
+                                }}
+                            />
+                        </AttachmentViewerProvider>
                         <OfflineBanner />
                     </ConvexAuthProvider>
                 </SafeAreaProvider>

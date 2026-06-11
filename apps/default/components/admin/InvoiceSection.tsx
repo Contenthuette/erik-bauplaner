@@ -9,7 +9,6 @@ import {
     Platform,
     Alert,
     ActivityIndicator,
-    Linking,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import * as DocumentPicker from "expo-document-picker";
@@ -23,6 +22,7 @@ import { Badge } from "../ui/Badge";
 import { DateField } from "../ui/DateField";
 import { colors, spacing, typography, fonts, radius } from "../../lib/theme";
 import { formatEuro, formatDate } from "../../lib/format";
+import { useAttachmentViewer } from "../AttachmentViewer";
 
 const statusMeta: Record<
     string,
@@ -38,6 +38,7 @@ interface Props {
 }
 
 export function InvoiceSection({ projectId }: Props) {
+    const { openAttachment } = useAttachmentViewer();
     const invoices = useQuery(api.invoices.listInvoices, { projectId });
     const generateUploadUrl = useMutation(api.invoices.generateUploadUrl);
     const createInvoice = useMutation(api.invoices.createInvoice);
@@ -195,7 +196,11 @@ export function InvoiceSection({ projectId }: Props) {
                                         <Pressable
                                             style={styles.miniBtn}
                                             onPress={() =>
-                                                Linking.openURL(inv.pdfUrl!)
+                                                openAttachment({
+                                                    url: inv.pdfUrl!,
+                                                    istPdf: true,
+                                                    name: "rechnung.pdf",
+                                                })
                                             }
                                         >
                                             <Ionicons
