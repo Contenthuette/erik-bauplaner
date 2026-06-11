@@ -17,6 +17,7 @@ import { Ionicons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import * as DocumentPicker from "expo-document-picker";
 import * as Haptics from "expo-haptics";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useQuery, useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
@@ -24,13 +25,6 @@ import { colors, spacing, fonts } from "../../lib/theme";
 
 interface ChatThreadProps {
     projectId: Id<"projects">;
-}
-
-interface PendingAnhang {
-    uri: string;
-    name: string;
-    mime: string;
-    istPdf: boolean;
 }
 
 function formatZeit(ms: number): string {
@@ -54,14 +48,15 @@ function formatTag(ms: number): string {
 }
 
 export function ChatThread({ projectId }: ChatThreadProps) {
+    const insets = useSafeAreaInsets();
     const messages = useQuery(api.messages.listMessages, { projectId });
     const sendMessage = useMutation(api.messages.sendMessage);
     const markRead = useMutation(api.messages.markThreadRead);
     const generateUploadUrl = useMutation(api.messages.generateUploadUrl);
 
     const [text, setText] = useState("");
-    const [anhaenge, setAnhaenge] = useState<PendingAnhang[]>([]);
     const [sending, setSending] = useState(false);
+    const [uploading, setUploading] = useState(false);
     const scrollRef = useRef<ScrollView>(null);
 
     // Eingehende Nachrichten beim Öffnen als gelesen markieren.
@@ -79,6 +74,38 @@ export function ChatThread({ projectId }: ChatThreadProps) {
         if (messages) scrollToEnd();
     }, [messages, scrollToEnd]);
 
+    // Lädt einen Anhang hoch und sendet ihn sofort als Chat-Nachricht.
+    const uploadAndSend = useCallback(
+        async (att: { uri: string; mime: string }) => {
+            setUploading(true);
+            try {
+                const uploadUrl = await generateUploadUrl({});
+                const resp = await fetch(att.uri);
+                const blob = await resp.blob();
+                const res = await fetch(uploadUrl, {
+                    method: "POST",
+                    headers: { "Content-Type": att.mime },
+                    body: blob,
+                });
+                const json = await res.json();
+                const storageId = json.storageId as Id<"_storage">;
+                await sendMessage({
+                    projectId,
+                    text: "",
+                    anhaenge: [storageId],
+                });
+                if (Platform.OS !== "web")
+                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                scrollToEnd();
+            } catch {
+                Alert.alert("Fehler", "Anhang konnte nicht gesendet werden.");
+            } finally {
+                setUploading(false);
+            }
+        },
+        [generateUploadUrl, sendMessage, projectId, scrollToEnd]
+    );
+
     const pickFoto = async () => {
         const result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ["images"],
@@ -86,15 +113,10 @@ export function ChatThread({ projectId }: ChatThreadProps) {
         });
         if (result.canceled || !result.assets?.[0]) return;
         const a = result.assets[0];
-        setAnhaenge((prev) => [
-            ...prev,
-            {
-                uri: a.uri,
-                name: a.fileName ?? "foto.jpg",
-                mime: a.mimeType ?? "image/jpeg",
-                istPdf: false,
-            },
-        ]);
+        await uploadAndSend({
+            uri: a.uri,
+            mime: a.mimeType ?? "image/jpeg",
+        });
     };
 
     const pickPdf = async () => {
@@ -104,15 +126,10 @@ export function ChatThread({ projectId }: ChatThreadProps) {
         });
         if (result.canceled || !result.assets?.[0]) return;
         const a = result.assets[0];
-        setAnhaenge((prev) => [
-            ...prev,
-            {
-                uri: a.uri,
-                name: a.name,
-                mime: "application/pdf",
-                istPdf: true,
-            },
-        ]);
+        await uploadAndSend({
+            uri: a.uri,
+            mime: "application/pdf",
+        });
     };
 
     const chooseAnhang = () => {
@@ -128,36 +145,15 @@ export function ChatThread({ projectId }: ChatThreadProps) {
         ]);
     };
 
-    const removeAnhang = (uri: string) => {
-        setAnhaenge((prev) => prev.filter((p) => p.uri !== uri));
-    };
-
     const handleSend = async () => {
         const trimmed = text.trim();
-        if (!trimmed && anhaenge.length === 0) return;
+        if (!trimmed) return;
         setSending(true);
         try {
-            const ids: Id<"_storage">[] = [];
-            for (const a of anhaenge) {
-                const uploadUrl = await generateUploadUrl({});
-                const resp = await fetch(a.uri);
-                const blob = await resp.blob();
-                const res = await fetch(uploadUrl, {
-                    method: "POST",
-                    headers: { "Content-Type": a.mime },
-                    body: blob,
-                });
-                const json = await res.json();
-                ids.push(json.storageId as Id<"_storage">);
-            }
-            await sendMessage({
-                projectId,
-                text: trimmed,
-                anhaenge: ids.length > 0 ? ids : undefined,
-            });
+            await sendMessage({ projectId, text: trimmed });
             setText("");
-            setAnhaenge([]);
-            if (Platform.OS !== "web") Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+            if (Platform.OS !== "web")
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
             scrollToEnd();
         } catch {
             Alert.alert("Fehler", "Nachricht konnte nicht gesendet werden.");
@@ -312,53 +308,30 @@ export function ChatThread({ projectId }: ChatThreadProps) {
                 {renderBubbles()}
             </ScrollView>
 
-            {anhaenge.length > 0 ? (
-                <ScrollView
-                    horizontal
-                    style={styles.anhangBar}
-                    contentContainerStyle={styles.anhangBarContent}
-                    showsHorizontalScrollIndicator={false}
-                >
-                    {anhaenge.map((a) => (
-                        <View key={a.uri} style={styles.anhangPreview}>
-                            {a.istPdf ? (
-                                <View style={styles.anhangPdf}>
-                                    <Ionicons
-                                        name="document-text"
-                                        size={22}
-                                        color={colors.textPrimary}
-                                    />
-                                </View>
-                            ) : (
-                                <Image
-                                    source={{ uri: a.uri }}
-                                    style={styles.anhangImage}
-                                    contentFit="cover"
-                                />
-                            )}
-                            <Pressable
-                                style={styles.anhangRemove}
-                                onPress={() => removeAnhang(a.uri)}
-                                hitSlop={8}
-                            >
-                                <Ionicons
-                                    name="close"
-                                    size={14}
-                                    color={colors.textOnDark}
-                                />
-                            </Pressable>
-                        </View>
-                    ))}
-                </ScrollView>
-            ) : null}
-
-            <View style={styles.inputBar}>
+            <View
+                style={[
+                    styles.inputBar,
+                    { paddingBottom: spacing.sm + insets.bottom },
+                ]}
+            >
                 <Pressable
                     style={styles.attachBtn}
                     onPress={chooseAnhang}
                     hitSlop={8}
+                    disabled={uploading}
                 >
-                    <Ionicons name="add" size={26} color={colors.textPrimary} />
+                    {uploading ? (
+                        <ActivityIndicator
+                            size="small"
+                            color={colors.textPrimary}
+                        />
+                    ) : (
+                        <Ionicons
+                            name="add"
+                            size={26}
+                            color={colors.textPrimary}
+                        />
+                    )}
                 </Pressable>
                 <TextInput
                     style={styles.input}
@@ -371,15 +344,10 @@ export function ChatThread({ projectId }: ChatThreadProps) {
                 <Pressable
                     style={[
                         styles.sendBtn,
-                        text.trim().length === 0 &&
-                            anhaenge.length === 0 &&
-                            styles.sendBtnDisabled,
+                        text.trim().length === 0 && styles.sendBtnDisabled,
                     ]}
                     onPress={handleSend}
-                    disabled={
-                        sending ||
-                        (text.trim().length === 0 && anhaenge.length === 0)
-                    }
+                    disabled={sending || text.trim().length === 0}
                 >
                     {sending ? (
                         <ActivityIndicator size="small" color={colors.textOnDark} />
@@ -497,43 +465,6 @@ const styles = StyleSheet.create({
         fontFamily: fonts.regular,
         fontSize: 11,
         color: colors.textSecondary,
-    },
-    anhangBar: {
-        maxHeight: 84,
-        borderTopWidth: 1,
-        borderTopColor: colors.border,
-    },
-    anhangBarContent: {
-        padding: spacing.sm,
-        gap: spacing.sm,
-    },
-    anhangPreview: { width: 64, height: 64 },
-    anhangImage: {
-        width: 64,
-        height: 64,
-        borderRadius: 10,
-        borderCurve: "continuous",
-    },
-    anhangPdf: {
-        width: 64,
-        height: 64,
-        borderRadius: 10,
-        backgroundColor: colors.surfaceMuted,
-        borderWidth: 1,
-        borderColor: colors.border,
-        alignItems: "center",
-        justifyContent: "center",
-    },
-    anhangRemove: {
-        position: "absolute",
-        top: -6,
-        right: -6,
-        width: 20,
-        height: 20,
-        borderRadius: 10,
-        backgroundColor: colors.textPrimary,
-        alignItems: "center",
-        justifyContent: "center",
     },
     inputBar: {
         flexDirection: "row",
