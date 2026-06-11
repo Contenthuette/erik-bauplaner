@@ -32,7 +32,7 @@ export default function Index() {
                 <Splash />
             </AuthLoading>
             <Unauthenticated>
-                <Redirect href="/(auth)/login" />
+                <Redirect href={"/(auth)/willkommen" as Href} />
             </Unauthenticated>
             <Authenticated>
                 <RoleRouter />

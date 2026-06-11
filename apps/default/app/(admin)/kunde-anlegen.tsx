@@ -28,14 +28,19 @@ interface Credentials {
     name: string;
     login: string;
     tempPassword: string;
+    accessCode: string;
+}
+
+function inviteLink(code: string): string {
+    return `https://polier.app/zugang?code=${code}`;
 }
 
 function buildInvite(c: Credentials): string {
     return (
         `Hallo ${c.name}, wir halten dich ab jetzt über die Polier-App über ` +
         `deine Baustelle auf dem Laufenden. Lade die App hier herunter: ` +
-        `${APP_LINK}. Deine Zugangsdaten: Benutzer ${c.login}, Passwort ` +
-        `${c.tempPassword}.`
+        `${APP_LINK}. Dein persönlicher Zugangscode: ${c.accessCode}. ` +
+        `Oder direkt öffnen: ${inviteLink(c.accessCode)}`
     );
 }
 
@@ -79,6 +84,7 @@ export default function KundeAnlegen() {
                 name: result.name,
                 login: result.login,
                 tempPassword: result.tempPassword,
+                accessCode: result.accessCode,
             });
         } catch (e) {
             const msg =
@@ -130,22 +136,15 @@ export default function KundeAnlegen() {
                         {creds.name} wurde eingeladen
                     </Text>
                     <Text style={styles.successHint}>
-                        Gib diese Zugangsdaten an deinen Kunden weiter. Das
-                        Passwort wird nur einmal angezeigt.
+                        Gib diesen Zugangscode an deinen Kunden weiter. Damit
+                        meldet er sich ohne Passwort an.
                     </Text>
 
                     <View style={styles.credBox}>
                         <View style={styles.credRow}>
-                            <Text style={styles.credLabel}>Benutzer</Text>
-                            <Text selectable style={styles.credValue}>
-                                {creds.login}
-                            </Text>
-                        </View>
-                        <View style={styles.credDivider} />
-                        <View style={styles.credRow}>
-                            <Text style={styles.credLabel}>Passwort</Text>
-                            <Text selectable style={styles.credValue}>
-                                {creds.tempPassword}
+                            <Text style={styles.credLabel}>Zugangscode</Text>
+                            <Text selectable style={styles.credValueBig}>
+                                {creds.accessCode}
                             </Text>
                         </View>
                     </View>
@@ -317,6 +316,12 @@ const styles = StyleSheet.create({
     credValue: {
         fontFamily: fonts.semibold,
         fontSize: 17,
+        color: colors.textPrimary,
+    },
+    credValueBig: {
+        fontFamily: fonts.bold,
+        fontSize: 24,
+        letterSpacing: 2,
         color: colors.textPrimary,
     },
     credDivider: {

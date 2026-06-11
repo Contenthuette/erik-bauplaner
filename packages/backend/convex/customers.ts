@@ -103,6 +103,7 @@ export const createCustomer = action({
         login: v.string(),
         tempPassword: v.string(),
         name: v.string(),
+        accessCode: v.string(),
     }),
     handler: async (ctx, args) => {
         const userId = await getAuthUserId(ctx);
@@ -158,11 +159,18 @@ export const createCustomer = action({
             adresse: args.adresse?.trim() || undefined,
         });
 
+        // Passwortlosen Zugangscode für den Kunden erzeugen.
+        const accessCode: string = await ctx.runMutation(
+            internal.accessCodes._generateForCustomer,
+            { companyId: caller.companyId, customerId: created.user._id }
+        );
+
         return {
             userId: created.user._id,
             login,
             tempPassword,
             name,
+            accessCode,
         };
     },
 });

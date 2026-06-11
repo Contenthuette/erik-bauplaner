@@ -192,4 +192,21 @@ export default defineSchema({
         schritteJson: v.any(),
     })
         .index("by_company", ["companyId"]),
+
+    // Zugangscodes für den passwortlosen Kundenzugang.
+    // Ein Code ist an einen Kunden-User (rolle "kunde") gebunden und optional
+    // an ein konkretes Projekt. Der Kunde meldet sich per Code an (statt Passwort).
+    accessCodes: defineTable({
+        code: v.string(),
+        companyId: v.id("companies"),
+        customerId: v.id("users"),
+        projectId: v.optional(v.id("projects")),
+        aktiv: v.boolean(),
+        erstelltAm: v.number(),
+        ersteEinloesungAm: v.optional(v.number()),
+        letzteEinloesungAm: v.optional(v.number()),
+    })
+        .index("by_code", ["code"])
+        .index("by_customer", ["customerId"])
+        .index("by_company", ["companyId"]),
 });

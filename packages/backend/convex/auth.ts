@@ -1,10 +1,11 @@
 import { convexAuth } from "@convex-dev/auth/server";
 import { PolierPassword } from "./providers/PolierPassword";
+import { AccessCode } from "./providers/AccessCode";
 
 import { env } from "./env";
 
 export const { auth, signIn, signOut, store, isAuthenticated } = convexAuth({
-    providers: [PolierPassword],
+    providers: [PolierPassword, AccessCode],
     callbacks: {
         /**
          * Wird nach dem Anlegen/Aktualisieren eines Users aufgerufen.
