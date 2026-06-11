@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
         paddingTop: spacing.sm,
         paddingBottom: spacing.xxl,
     },
-    largeTitle: { ...typography.largeTitle, marginBottom: spacing.lg },
+    largeTitle: { ...typography.largeTitle, marginTop: spacing.sm, marginBottom: spacing.lg },
     center: {
         alignItems: "center",
         justifyContent: "center",
