@@ -14,10 +14,12 @@ import {
     Inter_700Bold,
 } from "@expo-google-fonts/inter";
 import { colors } from "../lib/theme";
+import { convexUrl } from "../lib/config";
 import { usePushRegistration } from "../hooks/use-push-registration";
 import { OfflineBanner } from "../components/OfflineBanner";
+import { RootErrorBoundary } from "../components/RootErrorBoundary";
 
-const convex = new ConvexReactClient(process.env.EXPO_PUBLIC_CONVEX_URL!, {
+const convex = new ConvexReactClient(convexUrl, {
     unsavedChangesWarning: false,
 });
 
@@ -48,23 +50,25 @@ export default function RootLayout() {
     }
 
     return (
-        <GestureHandlerRootView style={{ flex: 1 }}>
-            <SafeAreaProvider>
-                <ConvexAuthProvider
-                    client={convex}
-                    storage={isNative ? secureStorage : undefined}
-                >
-                    <StatusBar style="dark" />
-                    <PushRegistrar />
-                    <Stack
-                        screenOptions={{
-                            headerShown: false,
-                            contentStyle: { backgroundColor: colors.background },
-                        }}
-                    />
-                    <OfflineBanner />
-                </ConvexAuthProvider>
-            </SafeAreaProvider>
-        </GestureHandlerRootView>
+        <RootErrorBoundary>
+            <GestureHandlerRootView style={{ flex: 1 }}>
+                <SafeAreaProvider>
+                    <ConvexAuthProvider
+                        client={convex}
+                        storage={isNative ? secureStorage : undefined}
+                    >
+                        <StatusBar style="dark" />
+                        <PushRegistrar />
+                        <Stack
+                            screenOptions={{
+                                headerShown: false,
+                                contentStyle: { backgroundColor: colors.background },
+                            }}
+                        />
+                        <OfflineBanner />
+                    </ConvexAuthProvider>
+                </SafeAreaProvider>
+            </GestureHandlerRootView>
+        </RootErrorBoundary>
     );
 }

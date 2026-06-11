@@ -1,0 +1,33 @@
+{
+    "cli": {
+        "version": ">= 12.0.0",
+        "appVersionSource": "remote"
+    },
+    "build": {
+        "development": {
+            "developmentClient": true,
+            "distribution": "internal",
+            "env": {
+                "EXPO_PUBLIC_CONVEX_URL": "https://blissful-magpie-18.convex.cloud",
+                "EXPO_PUBLIC_CONVEX_SITE_URL": "https://blissful-magpie-18.convex.site"
+            }
+        },
+        "preview": {
+            "distribution": "internal",
+            "env": {
+                "EXPO_PUBLIC_CONVEX_URL": "https://blissful-magpie-18.convex.cloud",
+                "EXPO_PUBLIC_CONVEX_SITE_URL": "https://blissful-magpie-18.convex.site"
+            }
+        },
+        "production": {
+            "autoIncrement": true,
+            "env": {
+                "EXPO_PUBLIC_CONVEX_URL": "https://blissful-magpie-18.convex.cloud",
+                "EXPO_PUBLIC_CONVEX_SITE_URL": "https://blissful-magpie-18.convex.site"
+            }
+        }
+    },
+    "submit": {
+        "production": {}
+    }
+}

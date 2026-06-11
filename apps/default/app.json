@@ -13,11 +13,13 @@
         "newArchEnabled": true,
         "ios": {
             "supportsTablet": true,
+            "bundleIdentifier": "de.contenthuette.polier",
             "infoPlist": {
                 "ITSAppUsesNonExemptEncryption": false
             }
         },
         "android": {
+            "package": "de.contenthuette.polier",
             "adaptiveIcon": {
                 "foregroundImage": "../../assets/images/adaptive-icon.png",
                 "backgroundColor": "#FFFFFF"
@@ -52,6 +54,10 @@
         ],
         "experiments": {
             "typedRoutes": true
+        },
+        "extra": {
+            "convexUrl": "https://blissful-magpie-18.convex.cloud",
+            "convexSiteUrl": "https://blissful-magpie-18.convex.site"
         }
     }
 }
