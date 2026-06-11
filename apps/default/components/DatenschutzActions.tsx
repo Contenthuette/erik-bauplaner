@@ -158,12 +158,6 @@ export function DatenschutzActions() {
                     }
                 />
             </Card>
-
-            <Text style={styles.hint}>
-                Ihre Daten werden auf Servern innerhalb der EU verarbeitet und
-                nicht an Dritte außerhalb notwendiger Dienstleister
-                weitergegeben.
-            </Text>
         </View>
     );
 }
@@ -238,11 +232,5 @@ const styles = StyleSheet.create({
         height: 1,
         backgroundColor: colors.border,
         marginLeft: spacing.lg + 20 + spacing.md,
-    },
-    hint: {
-        ...typography.footnote,
-        marginTop: spacing.md,
-        marginHorizontal: 2,
-        lineHeight: 18,
     },
 });
