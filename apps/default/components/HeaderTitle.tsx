@@ -1,22 +1,12 @@
 import React from "react";
 import { View, Text, StyleSheet, StyleProp, ViewStyle } from "react-native";
-import Svg, { Path } from "react-native-svg";
+import { Image } from "expo-image";
 import { typography, spacing } from "../lib/theme";
+
+import polierLogo from "../../assets/images/polier-logo.png";
 
 // Feste Maße, damit das Logo auf allen Seiten exakt identisch sitzt
 const LOGO_SIZE = 40;
-
-function PolierLogo({ size = LOGO_SIZE }: { size?: number }) {
-    return (
-        <Svg width={size} height={size} viewBox="160 108 246 296">
-            <Path
-                fill="#0A0A0A"
-                fillRule="evenodd"
-                d="M 168 116 H 300 A 98 98 0 0 1 300 312 H 224 V 396 H 168 Z M 224 172 V 256 H 300 A 42 42 0 0 0 300 172 Z"
-            />
-        </Svg>
-    );
-}
 
 interface HeaderTitleProps {
     title: string;
@@ -32,7 +22,11 @@ interface HeaderTitleProps {
 export function HeaderTitle({ title, style }: HeaderTitleProps) {
     return (
         <View style={[styles.container, style]}>
-            <PolierLogo size={LOGO_SIZE} />
+            <Image
+                source={polierLogo}
+                style={styles.logo}
+                contentFit="contain"
+            />
             <Text style={styles.title} numberOfLines={1}>
                 {title}
             </Text>
@@ -45,6 +39,10 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignItems: "center",
         gap: spacing.md,
+    },
+    logo: {
+        width: LOGO_SIZE,
+        height: LOGO_SIZE,
     },
     title: {
         ...typography.largeTitle,
