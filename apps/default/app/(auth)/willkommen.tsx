@@ -4,9 +4,10 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import type { Href } from "expo-router";
-import { Wordmark } from "../../components/Wordmark";
-import { LogoMark } from "../../components/LogoMark";
+import { Image } from "expo-image";
 import { colors, spacing, typography, fonts, radius } from "../../lib/theme";
+
+const polierWidget = require("../../../assets/images/polier-widget.png");
 
 const BENEFITS = [
     "Kundenkommunikation leicht gemacht",
@@ -24,8 +25,11 @@ export default function Willkommen() {
                 showsVerticalScrollIndicator={false}
             >
                 <View style={styles.header}>
-                    <LogoMark size={72} />
-                    <Wordmark size={48} />
+                    <Image
+                        source={polierWidget}
+                        style={styles.widget}
+                        contentFit="contain"
+                    />
                     <Text style={styles.tagline}>
                         Baufortschritt einfach im Blick.
                     </Text>
@@ -114,6 +118,10 @@ const styles = StyleSheet.create({
     header: {
         alignItems: "center",
         gap: spacing.md,
+    },
+    widget: {
+        width: 200,
+        height: 200,
     },
     tagline: {
         ...typography.subhead,
