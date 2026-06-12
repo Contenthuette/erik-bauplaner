@@ -5,6 +5,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import type { Href } from "expo-router";
 import { Wordmark } from "../../components/Wordmark";
+import { LogoMark } from "../../components/LogoMark";
 import { colors, spacing, typography, fonts, radius } from "../../lib/theme";
 
 const BENEFITS = [
@@ -23,6 +24,7 @@ export default function Willkommen() {
                 showsVerticalScrollIndicator={false}
             >
                 <View style={styles.header}>
+                    <LogoMark size={72} />
                     <Wordmark size={48} />
                     <Text style={styles.tagline}>
                         Baufortschritt einfach im Blick.
@@ -110,11 +112,13 @@ const styles = StyleSheet.create({
         gap: spacing.xxl,
     },
     header: {
-        alignItems: "flex-start",
+        alignItems: "center",
+        gap: spacing.md,
     },
     tagline: {
         ...typography.subhead,
         marginTop: spacing.md,
+        textAlign: "center",
     },
     benefits: {
         gap: spacing.md,

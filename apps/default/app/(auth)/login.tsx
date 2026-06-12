@@ -13,6 +13,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter, Link } from "expo-router";
 import { useAuthActions } from "@convex-dev/auth/react";
 import { Wordmark } from "../../components/Wordmark";
+import { LogoMark } from "../../components/LogoMark";
 import { Button } from "../../components/ui/Button";
 import { Input } from "../../components/ui/Input";
 import { colors, spacing, fonts, typography } from "../../lib/theme";
@@ -59,6 +60,7 @@ export default function LoginScreen() {
                     showsVerticalScrollIndicator={false}
                 >
                     <View style={styles.header}>
+                        <LogoMark size={72} />
                         <Wordmark size={44} />
                         <Text style={styles.subtitle}>
                             Baufortschritt einfach im Blick.
@@ -122,12 +124,14 @@ const styles = StyleSheet.create({
         paddingVertical: spacing.xxl,
     },
     header: {
-        alignItems: "flex-start",
+        alignItems: "center",
+        gap: spacing.md,
         marginBottom: spacing.xxl,
     },
     subtitle: {
         ...typography.subhead,
         marginTop: spacing.md,
+        textAlign: "center",
     },
     form: {
         gap: spacing.lg,
