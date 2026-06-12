@@ -29,6 +29,19 @@ export function hatZugriff(status: string | undefined): boolean {
 }
 
 /**
+ * E-Mail-Adressen, die ohne Abo/Payment vollen Zugriff erhalten
+ * (interne/kostenlose Konten). Vergleich erfolgt case-insensitive.
+ */
+export const ABO_BEFREITE_EMAILS: readonly string[] = [
+    "info@contenthuette.de",
+];
+
+function istAboBefreit(email: string | undefined): boolean {
+    if (!email) return false;
+    return ABO_BEFREITE_EMAILS.includes(email.trim().toLowerCase());
+}
+
+/**
  * Liefert den Abo-Status für den aktuellen Nutzer.
  * - Kunden: immer freigeschaltet (kein Abo nötig).
  * - Betrieb: Status der zugehörigen Company.
@@ -73,6 +86,22 @@ export const getMySubscription = authQuery({
                 status: undefined,
                 currentPeriodEnd: undefined,
                 cancelAtPeriodEnd: undefined,
+                plan: planObj,
+            };
+        }
+
+        // Befreite Konten (z. B. interne Nutzer) erhalten immer Zugriff.
+        if (istAboBefreit(user.email)) {
+            const companyFree = user.companyId
+                ? await ctx.db.get(user.companyId)
+                : null;
+            return {
+                freigeschaltet: true,
+                aboRelevant: false,
+                kannVerwalten: user.rolle === "owner",
+                status: companyFree?.subscriptionStatus,
+                currentPeriodEnd: companyFree?.currentPeriodEnd,
+                cancelAtPeriodEnd: companyFree?.cancelAtPeriodEnd,
                 plan: planObj,
             };
         }
