@@ -1,20 +1,20 @@
 import React from "react";
 import { View, Text, StyleSheet, StyleProp, ViewStyle } from "react-native";
-import Svg, { Path } from "react-native-svg";
+import { Image } from "expo-image";
 import { typography, spacing } from "../lib/theme";
 
 // Feste Maße, damit das Logo auf allen Seiten exakt identisch sitzt
 const LOGO_SIZE = 40;
 
+const polierLogo = require("../../../assets/images/polier-icon.png");
+
 function PolierLogo({ size = LOGO_SIZE }: { size?: number }) {
     return (
-        <Svg width={size} height={size} viewBox="160 108 246 296">
-            <Path
-                fill="#0A0A0A"
-                fillRule="evenodd"
-                d="M 168 116 H 300 A 98 98 0 0 1 300 312 H 224 V 396 H 168 Z M 224 172 V 256 H 300 A 42 42 0 0 0 300 172 Z"
-            />
-        </Svg>
+        <Image
+            source={polierLogo}
+            style={{ width: size, height: size }}
+            contentFit="contain"
+        />
     );
 }
 
